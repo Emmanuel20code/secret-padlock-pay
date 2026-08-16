@@ -4,6 +4,7 @@ import {
   BarChart3,
   Check,
   KeyRound,
+  Lock,
   RefreshCcw,
   ShieldCheck,
   Smartphone,
@@ -432,6 +433,16 @@ function Index() {
           <p>© {new Date().getFullYear()} PayWave. Payments powered by Safaricom Daraja.</p>
         </div>
       </footer>
+
+      {/* Hidden super admin entrance */}
+      <Link
+        to="/admin"
+        aria-label="Super admin"
+        title=""
+        className="group fixed bottom-4 right-4 z-50 flex h-9 w-9 items-center justify-center rounded-full opacity-0 transition-opacity duration-300 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none"
+      >
+        <Lock className="h-4 w-4 text-muted-foreground" strokeWidth={2} />
+      </Link>
     </div>
   );
 }

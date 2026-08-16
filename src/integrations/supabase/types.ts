@@ -14,16 +14,236 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      api_keys: {
+        Row: {
+          created_at: string
+          id: string
+          key_hash: string
+          key_prefix: string
+          last_used_at: string | null
+          name: string
+          revoked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key_hash: string
+          key_prefix: string
+          last_used_at?: string | null
+          name?: string
+          revoked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key_hash?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          name?: string
+          revoked_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      merchant_settings: {
+        Row: {
+          account_reference: string | null
+          account_type: string
+          callback_url: string | null
+          created_at: string
+          passkey: string | null
+          shortcode: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_reference?: string | null
+          account_type?: string
+          callback_url?: string | null
+          created_at?: string
+          passkey?: string | null
+          shortcode?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_reference?: string | null
+          account_type?: string
+          callback_url?: string | null
+          created_at?: string
+          passkey?: string | null
+          shortcode?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      platform_credentials: {
+        Row: {
+          consumer_key: string | null
+          consumer_secret: string | null
+          created_at: string
+          default_callback_url: string | null
+          default_passkey: string | null
+          default_shortcode: string | null
+          environment: string
+          id: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          consumer_key?: string | null
+          consumer_secret?: string | null
+          created_at?: string
+          default_callback_url?: string | null
+          default_passkey?: string | null
+          default_shortcode?: string | null
+          environment?: string
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          consumer_key?: string | null
+          consumer_secret?: string | null
+          created_at?: string
+          default_callback_url?: string | null
+          default_passkey?: string | null
+          default_shortcode?: string | null
+          environment?: string
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          business_name: string | null
+          created_at: string
+          email: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          business_name?: string | null
+          created_at?: string
+          email?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          business_name?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          account_reference: string | null
+          amount: number
+          api_key_id: string | null
+          checkout_request_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          merchant_request_id: string | null
+          mpesa_receipt: string | null
+          phone: string
+          result_code: string | null
+          result_desc: string | null
+          shortcode: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_reference?: string | null
+          amount: number
+          api_key_id?: string | null
+          checkout_request_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          phone: string
+          result_code?: string | null
+          result_desc?: string | null
+          shortcode?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_reference?: string | null
+          amount?: number
+          api_key_id?: string | null
+          checkout_request_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          phone?: string
+          result_code?: string | null
+          result_desc?: string | null
+          shortcode?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +370,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

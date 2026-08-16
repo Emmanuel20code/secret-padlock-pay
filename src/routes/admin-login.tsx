@@ -40,6 +40,7 @@ function AdminLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [canClaim, setCanClaim] = useState(false);
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
 
   async function routeByRole() {
     const status = await fetchStatus();
@@ -60,6 +61,21 @@ function AdminLogin() {
     event.preventDefault();
     setLoading(true);
     try {
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${window.location.origin}/admin-login` },
+        });
+        if (error) throw error;
+        if (!data.session) {
+          toast.success("Account created. Confirm your email, then sign in here.");
+          setMode("signin");
+          return;
+        }
+        await routeByRole();
+        return;
+      }
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       await routeByRole();
@@ -89,7 +105,7 @@ function AdminLogin() {
         <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
           <ShieldCheck className="size-6 text-primary" />
           <h1 className="mt-3 text-xl font-semibold tracking-tight text-foreground">
-            Operator access
+            {mode === "signin" ? "Operator access" : "Create operator account"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Restricted area. Super admin credentials only.
@@ -119,9 +135,23 @@ function AdminLogin() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Verifying…" : "Enter console"}
+              {loading
+                ? "Working…"
+                : mode === "signin"
+                  ? "Enter console"
+                  : "Create operator account"}
             </Button>
           </form>
+
+          <button
+            type="button"
+            className="mt-4 w-full text-sm text-muted-foreground hover:text-foreground"
+            onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
+          >
+            {mode === "signin"
+              ? "No operator account yet? Create one"
+              : "Already have an account? Sign in"}
+          </button>
 
           {canClaim && (
             <Button

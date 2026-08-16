@@ -436,7 +436,7 @@ function Index() {
 
       {/* Hidden super admin entrance */}
       <Link
-        to="/admin"
+        to="/admin-login"
         aria-label="Super admin"
         title=""
         className="group fixed bottom-4 right-4 z-50 flex h-9 w-9 items-center justify-center rounded-full opacity-0 transition-opacity duration-300 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none"
